@@ -6,12 +6,17 @@ import (
 	"os"
 )
 
-func countAtSigns(charArray string) int {
+func countAtSigns(grid []string, i, j int) int {
 	total := 0
-
-	for _, c := range charArray {
-		if c == '@' {
-			total++
+	rows, cols := len(grid), len(grid[0])
+	for x := i - 1; x <= i+1; x++ {
+		for y := j - 1; y <= j+1; y++ {
+			if (x == i && y == j) || (x == -1 || y == -1 || x == rows || y == cols) {
+				continue
+			}
+			if grid[x][y] == '@' {
+				total++
+			}
 		}
 	}
 	return total
@@ -26,77 +31,13 @@ func main() {
 		line := scanner.Text()
 		grid = append(grid, line)
 	}
-	// comparison_grid := make([]string, len(grid))
+
 	total := 0
 	for i, line := range grid {
 		for j, c := range line {
-
-			if ((i == 0 && j == 0) ||
-				(i == 0 && j == len(line)-1) ||
-				(i == len(grid)-1 && j == 0) ||
-				(i == len(grid)-1 && j == len(line)-1)) &&
-				c == '@' {
+			if c == '@' && countAtSigns(grid, i, j) < 4 {
 				total++
-			} else if i == 0 {
-				if c == '@' {
-					chars := string(grid[i][j-1]) +
-						string(grid[i][j+1]) +
-						string(grid[i+1][j]) +
-						string(grid[i+1][j+1]) +
-						string(grid[i+1][j-1])
-					if countAtSigns(chars) < 4 {
-						total++
-					}
-				}
-			} else if i == len(grid)-1 {
-				if c == '@' {
-					chars := string(grid[i][j-1]) +
-						string(grid[i][j+1]) +
-						string(grid[i-1][j]) +
-						string(grid[i-1][j+1]) +
-						string(grid[i-1][j-1])
-					if countAtSigns(chars) < 4 {
-						total++
-					}
-				}
-			} else if j == 0 {
-				if c == '@' {
-					chars := string(grid[i+1][j]) +
-						string(grid[i-1][j]) +
-						string(grid[i-1][j+1]) +
-						string(grid[i][j+1]) +
-						string(grid[i+1][j+1])
-					if countAtSigns(chars) < 4 {
-						total++
-					}
-				}
-			} else if j == len(line)-1 {
-				if c == '@' {
-					chars := string(grid[i+1][j]) +
-						string(grid[i-1][j]) +
-						string(grid[i-1][j-1]) +
-						string(grid[i][j-1]) +
-						string(grid[i+1][j-1])
-					if countAtSigns(chars) < 4 {
-						total++
-					}
-				}
-			} else {
-				if c == '@' {
-					chars := string(grid[i+1][j]) +
-						string(grid[i-1][j]) +
-						string(grid[i-1][j-1]) +
-						string(grid[i][j-1]) +
-						string(grid[i+1][j-1]) +
-						string(grid[i-1][j+1]) +
-						string(grid[i][j+1]) +
-						string(grid[i+1][j+1])
-					if countAtSigns(chars) < 4 {
-						total++
-					}
-				}
 			}
-
 		}
 	}
 
